@@ -5,24 +5,26 @@ import numpy as np
 from get_matrix_elements import matrix_element_nospin
 
 
-
-
 # Define mapping from state to index in Hamiltonian. 
 # Spin up is encoded as spin=1, spin down as spin=-1.
 def state_to_index(hole_n: Literal[1, 2], spin: Literal[1, -1]) -> int:
+    """Convert a state, specified by n number for the hole and spin, to an index in the Hamiltonian."""
     return hole_n + spin + 1
 
 def index_to_state(index: int) -> tuple[Literal[1, 2], Literal[1, -1]]:
+    """Convert an index in the Hamiltonian to a state, specified by n number for the hole and spin."""
     hole_n = (index - 1) % 2 + 1
     spin = (index - 1) // 2 * 2 - 1
     return (hole_n, spin)
 
 
 def matelem_ref_to_ref(Z: int) -> float:
+    """Expected value of the reference state. Will be saved as element H[0, 0] in the Hamiltonian."""
     return - 5/4 * Z**2  + 586373/373248 * Z
 
 
 def matelem_ref_to_1h1p(Z: int, hole_n: Literal[1, 2], spin: Literal[1, -1]) -> np.ndarray:
+    """Matrix element from the reference state to a 1h1p state."""
     onebody_part = 0
     twobody_part = None
     raise NotImplementedError
@@ -33,6 +35,7 @@ def delta(alpha, beta):
 
 
 def h0(Z, alpha: tuple[int, int], beta: tuple[int, int]) -> float:
+    """computes <alpha|h0|beta>"""
     orbital1, spin1 = alpha
     return - Z**2 / (2 * orbital1**2) * delta(alpha, beta) 
 
@@ -44,6 +47,7 @@ def matelem_1h1p_to_1h1p_onebody_contribution(
     b: tuple[int, int],
     j: tuple[int, int]
 ) -> np.ndarray:
+    """ Computes the onebody matrix element <Phi^a_i|H_0|Phi^b_j>."""
     below_fermi = [(1, 1), (1, -1), (2, 1), (2, -1)]
 
     term1_onebody = h0(Z, a, b) * delta(i, j)
