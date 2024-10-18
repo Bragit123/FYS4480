@@ -23,7 +23,7 @@ def matelem_ref_to_ref(Z: int) -> float:
     return - 5/4 * Z**2  + 586373/373248 * Z
 
 
-def matelem_ref_to_1h1p(Z: int, hole_n: Literal[1, 2], spin: Literal[1, -1]) -> np.ndarray:
+def matelem_ref_to_1p1h(Z: int, hole_n: Literal[1, 2], spin: Literal[1, -1]) -> np.ndarray:
     """Matrix element from the reference state to a 1h1p state."""
     onebody_part = 0
     twobody_part = None
@@ -37,7 +37,7 @@ def delta(alpha, beta):
 def h0(Z, alpha: tuple[int, int], beta: tuple[int, int]) -> float:
     """computes <alpha|h0|beta>"""
     orbital1, spin1 = alpha
-    return - Z**2 / (2 * orbital1**2) * delta(alpha, beta) 
+    return - Z**2 / (2 * orbital1**2) * delta(alpha, beta)
 
 
 def matelem_1h1p_to_1h1p_onebody_contribution(
@@ -87,8 +87,8 @@ def assemble_hamiltonian_beryllium() -> np.ndarray:
     H = np.zeros((5, 5))
     H[0, 0] = matelem_ref_to_ref(4)
     for i in range(1, 5):
-        H[0, i]  = matelem_ref_to_1h1p(Z, *index_to_state(i))
-        H[i, 0]  = matelem_ref_to_1h1p(Z, *index_to_state(i))
+        H[0, i]  = matelem_ref_to_1p1h(Z, *index_to_state(i))
+        H[i, 0]  = matelem_ref_to_1p1h(Z, *index_to_state(i))
 
     for i in range(1, 5):
         for j in range(1, 5):
