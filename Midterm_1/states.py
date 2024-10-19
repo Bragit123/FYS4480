@@ -3,6 +3,9 @@ from typing import Literal
 
 from get_matrix_elements import matrix_element_nospin, matrix_element_nospin_AS
 
+def delta_fn(i, j):
+    return int(i == j)
+
 
 class State1P:
     def __init__(self, n: int, spin: Literal[1, -1]):
@@ -46,37 +49,25 @@ class State2P:
         return matrix_element_nospin_AS(Z, alphabeta, gammadelta)
     
     def get_matrix_element_AS(self, other: State2P, Z):
-        if self.same_spins():
-            return self.get_matrix_element_nospin_AS(other, Z)
-        else:
-            return self.get_matrix_element_nospin(other, Z)
+        alpha = self.P1
+        beta = self.P2
+        gamma = other.P1
+        delta = other.P2
+
+        sa = alpha.spin
+        sb = beta.spin
+        sc = gamma.spin
+        sd = delta.spin
+        
+        deltagamma = State2P(delta, gamma)
+
+        term1 = self.get_matrix_element_nospin(other, Z) * delta_fn(sa, sc) * delta_fn(sb, sd)
+        term2 = self.get_matrix_element_nospin(deltagamma, Z) * delta_fn(sa, sd) * delta_fn(sb, sc)
+        return term1 - term2
         
     def __str__(self):
         return f"[[{self.P1}, {self.P2})]]"
     
-
-def below_fermi_helium() -> list[State1P]:
-    return [State1P(1, 1), State1P(1, -1)]
-
-def below_fermi_beryllium() -> list[State1P]:
-    return [State1P(1, 1), State1P(1, -1), State1P(2, 1), State1P(2, -1)]
-
-def get_all_1p_states():
-    return [State1P(1, 1), State1P(1, -1), State1P(2, 1), State1P(2, -1), State1P(3, 1), State1P(3, -1)]
-
-
-
-if __name__ == "__main__":
-    l1 = below_fermi_helium()
-    ket1, ket2 = l1
-    state = State2P(ket1, ket2)
-    print(state.get_alphabeta())
-    print(state.get_matrix_element_nospin(state, 2))
-    print(state.get_matrix_element_nospin_AS(state, 2))
-    print(state.get_matrix_element_AS(state, 2))
-    print(state.same_spins())
-    print(state)
-
 
 class OneParticleOneHole():
     def __init__(self, particle: State1P, hole: State1P):
@@ -111,27 +102,24 @@ class ReferenceStateBeryllium(ReferenceState):
     def energy(self):
         return - 5/4 * self.Z**2  + 586373/373248 * self.Z
 
-# below_fermi_beryllium()
+def below_fermi_helium() -> list[State1P]:
+    return [State1P(1, 1), State1P(1, -1)]
+
+def below_fermi_beryllium() -> list[State1P]:
+    return [State1P(1, 1), State1P(1, -1), State1P(2, 1), State1P(2, -1)]
+
+def get_all_1p_states():
+    return [State1P(1, 1), State1P(1, -1), State1P(2, 1), State1P(2, -1), State1P(3, 1), State1P(3, -1)]
 
 
 
-
-
-
-
-
-
-# class Translator:
-#     def __init__(self):
-#         pass
-
-#     def index_to_state(self, index: int):
-#         pass
-
-#     # def state_to_index(self, state) -> int:
-#     #     pass
-
-#     def get_spins_equal(self, index: int) -> bool:
-#         pass
-
-#     def 
+if __name__ == "__main__":
+    l1 = below_fermi_helium()
+    ket1, ket2 = l1
+    state = State2P(ket1, ket2)
+    print(state.get_alphabeta())
+    print(state.get_matrix_element_nospin(state, 2))
+    print(state.get_matrix_element_nospin_AS(state, 2))
+    print(state.get_matrix_element_AS(state, 2))
+    print(state.same_spins())
+    print(state)

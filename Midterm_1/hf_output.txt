@@ -1,0 +1,23 @@
+Problem f:
+
+Single-particle energies, Helium, after one iteration:
+[-0.78328822 -0.78328822  0.03963372  0.03963372  0.45345627  0.45345627]
+Ground state energy, Helium, after one iteration:
+-2.8291928003392006
+Single-particle energies, Beryllium, after one iteration:
+[-3.95069926 -3.95069926 -0.10403995 -0.10403995  0.86568896  0.86568896]
+Ground state energy, Beryllium, after one iteration:
+-14.499822866520372
+
+Problem g:
+
+Converged in 14 iterations.
+Single-particle energies, Helium:
+[-0.888475   -0.888475    0.03942215  0.03942215  0.43951618  0.43951618]
+Ground state energy, Helium:
+-2.83109608678504
+Converged in 15 iterations.
+Single-particle energies, Beryllium:
+[-4.68698242 -4.68698242 -0.30526599 -0.30526599  0.81112416  0.81112416]
+Ground state energy, Beryllium:
+-14.508252442377167
